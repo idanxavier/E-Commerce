@@ -21,7 +21,18 @@ namespace ECommerceUserAPI.Controllers
                 return Ok(newUser);
             } 
             catch (Exception error){
-                throw error;
+                return BadRequest(error.Message);
+            }
+        }
+
+        [HttpPost("SignIn")]
+        public async Task<IActionResult> SignIn([FromBody] LoginModel model) {
+            try {
+                UserDTO user = await _authService.SignIn(model);
+                return Ok(user);
+            } 
+            catch (Exception error){
+                return BadRequest(error.Message);
             }
         }
     }

@@ -10,7 +10,6 @@ services:
       MYSQL_PASSWORD: Cabuto12
     volumes:
       - dbdata:/var/lib/mysql
-      - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
     restart: always
     ports:
       - "3307:3306"
@@ -21,7 +20,7 @@ services:
     ports:
       - "80:80"
     build: 
-      context: User
+      context: Backend/User
     depends_on:
       - database
 
