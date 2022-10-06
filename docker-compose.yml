@@ -1,6 +1,7 @@
 version: '3.0'
 
 services:
+
   database:
     image: mysql:5.7
     environment:
@@ -15,14 +16,26 @@ services:
       - "3307:3306"
     expose: 
       - "3307"
+
   userapi:
     image: ecommerceuserapi
     ports:
-      - "80:80"
+      - "81:80"
     build: 
       context: Backend/User
     depends_on:
       - database
+
+  frontend:
+    build: Frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Frontend/nginx-configs:/etc/nginx/conf.d
+    environment:
+      TZ: "America/Sao_Paulo"
+    restart: unless-stopped
 
 volumes:
   dbdata:
