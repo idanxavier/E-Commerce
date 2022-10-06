@@ -26,6 +26,24 @@ services:
     depends_on:
       - database
 
+  productapi:
+    image: ecommerceproductapi
+    ports:
+      - "82:80"
+    build:
+      context: Backend/Product
+    depends_on:
+      - database
+
+  paymentapi:
+    image: ecommercepaymentapi
+    ports:
+      - "83:80"
+    build:
+      context: Backend/Payment
+    depends_on:
+      - database
+
   frontend:
     build: Frontend
     ports:

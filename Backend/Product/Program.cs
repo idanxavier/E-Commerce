@@ -1,9 +1,11 @@
-using System.Text;
-using ECommerceUserAPI;
+using ECommerceProductAPI.Domain;
+using ECommerceProductAPI.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MySqlConnector;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -23,8 +25,7 @@ services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
+}).AddJwtBearer(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
@@ -37,7 +38,9 @@ services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
     };
 });
-services.AddScoped<IAuthService, AuthService>();
+
+services.AddScoped<IProductService, ProductService>();
+services.AddScoped<ProductRepository>();
 
 var app = builder.Build();
 
@@ -50,8 +53,6 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
 }
 
-// app.UseHttpsRedirection();
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -60,6 +61,10 @@ app.UseCors(p => {
     p.AllowAnyHeader();
     p.AllowAnyOrigin();
 });
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
