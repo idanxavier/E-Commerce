@@ -1,0 +1,29 @@
+version: '3.0'
+
+services:
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecommerce_user
+      MYSQL_USER: danxjj
+      MYSQL_PASSWORD: Cabuto12
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
+    restart: always
+    ports:
+      - "3307:3306"
+    expose: 
+      - "3307"
+  userapi:
+    image: ecommerceuserapi
+    ports:
+      - "80:80"
+    build: 
+      context: User
+    depends_on:
+      - database
+
+volumes:
+  dbdata:
