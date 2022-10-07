@@ -15,6 +15,7 @@ namespace ECommerceProductAPI.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpPost("new-product")]
         public async Task<IActionResult> CreateProduct(ProductDTO newProductDTO)
         {

@@ -6,7 +6,7 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ecommerce_user
+      MYSQL_DATABASE: ecommerce
       MYSQL_USER: danxjj
       MYSQL_PASSWORD: Cabuto12
     volumes:
@@ -14,14 +14,14 @@ services:
     restart: always
     ports:
       - "3307:3306"
-    expose: 
+    expose:
       - "3307"
 
   userapi:
     image: ecommerceuserapi
     ports:
       - "81:80"
-    build: 
+    build:
       context: Backend/User
     depends_on:
       - database

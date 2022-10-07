@@ -1,3 +1,54 @@
-<div class="row" *ngFor="let product of products">
-    {{product.name}}
+<div class="row">
+    <div class="card col-12">
+        <div class="card-title">
+            New Product
+        </div>
+        <div class="card-body rounded border">
+            <div class="row">
+                <div class="col-6 offset-3">
+                    <div class="row">
+                        <div class="col-12 mt-1">
+                            <label for="name" class="form-label">Name</label>
+                            <input class="form-control" id="name" type="text" [(ngModel)]="productName">
+                        </div>
+                        <div class="col-12 mt-1">
+                            <label for="price" class="form-label">Price</label>
+                            <input class="form-control" id="name" type="number" [(ngModel)]="productPrice">
+                        </div>
+                        <div class="col-12 mt-1">
+                            <label for="inventory" class="form-label">Inventory</label>
+                            <input class="form-control" id="inventory" type="number" [(ngModel)]="productInventory">
+                        </div>
+                        <div class="col-12 mt-1">
+                            <label for="category" class="form-label">Categories</label>
+                            <select class="form-select" [(ngModel)]="productCategory" id="category">
+                                <option *ngFor="let category of categories" [value]=category>{{category}}</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mt-1">
+                            <label for="photo" class="form-label">Photo</label>
+                            <input class="form-control" #imageInput type="file" accept="image/*"
+                                (change)="processFile(imageInput)" id="photo">
+                        </div>
+                        <button class="btn btn-dark col-6 offset-3 mt-2" (click)="NewProduct()">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="card col-2 m-2" *ngFor="let product of products">
+        <div class="card-title">
+            {{product.name}}
+        </div>
+        <div class="card-body">
+            Price: {{product.price}}<br>
+            Category: {{product.category}}<br>
+            Inventory: {{product.inventory}}
+        </div>
+        <div class="card-footer" *ngIf="product.photo != ''">
+            <img [src]=getSafeUrl(product.photo) style="width: 100px;height:100px;" />
+        </div>
+    </div>
 </div>
