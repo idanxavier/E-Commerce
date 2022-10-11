@@ -1,4 +1,3 @@
-using ECommerceAPIGateway.Domain;
 using ECommerceAPIGateway.Domain.Service.Factories;
 using ECommerceAPIGateway.Domain.Service.Implementations;
 using ECommerceAPIGateway.Domain.Service.Interfaces;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MySqlConnector;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,8 +41,7 @@ services.AddAuthentication(options =>
     };
 });
 
-//services.AddScoped<IAuthService, AuthService>();
-services.AddScoped<RequestHandler>();
+services.AddScoped<IRequestHandler, RequestHandler>();
 services.AddScoped<RequestFactory>();
 
 var app = builder.Build();
@@ -62,6 +59,12 @@ app.UseExceptionHandler(c => c.Run(async context =>
     var response = new { error = exception.Message };
     await context.Response.WriteAsJsonAsync(response);
 }));
+
+app.UseCors(p => {
+    p.AllowAnyMethod();
+    p.AllowAnyHeader();
+    p.AllowAnyOrigin();
+});
 
 app.UseAuthentication();
 

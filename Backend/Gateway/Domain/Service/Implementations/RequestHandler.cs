@@ -1,11 +1,12 @@
 ﻿using ECommerceAPIGateway.Domain.Service.Factories;
+using ECommerceAPIGateway.Domain.Service.Interfaces;
 using ECommerceUserAPI;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace ECommerceAPIGateway.Domain.Service.Implementations
 {
-    public class RequestHandler
+    public class RequestHandler : IRequestHandler
     {
         private readonly RequestFactory _requestFactory;
         public RequestHandler(RequestFactory requestFactory)

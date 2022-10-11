@@ -42,13 +42,17 @@ namespace ECommerceAPIGateway.Domain.Service.Factories
             client.DefaultRequestHeaders.Add(_configuration["HeaderSecret"], "");
             client.BaseAddress = new Uri(url);
             HttpRequestMessage request = new HttpRequestMessage(GetRequestMethod(method), endpoint);
-            string json = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<dynamic>(body.ToString()));
+
             if (method == "POST" || method == "PUT")
+            {
+                string json = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<dynamic>(body.ToString()));
                 request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            }         
+
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (!response.IsSuccessStatusCode)
-                throw new ArgumentException($"Error in service: {serviceName},\nendpoint: {endpointName}.");
+            //if (!response.IsSuccessStatusCode)
+            //        throw new ArgumentException($"Error in service: {serviceName},\nendpoint: {endpointName}.");
 
             string jsonResponse = await response.Content.ReadAsStringAsync();
             return jsonResponse;

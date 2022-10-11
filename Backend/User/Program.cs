@@ -58,12 +58,6 @@ app.UseSwaggerUI();
 
 app.UseMiddleware<HeaderChecker>();
 
-app.UseCors(p => {
-    p.AllowAnyMethod();
-    p.AllowAnyHeader();
-    p.AllowAnyOrigin();
-});
-
 app.UseAuthorization();
 
 app.MapControllers();

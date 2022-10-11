@@ -32,7 +32,7 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        return this.http.post<any>(`${environment.apiUrl}/api/auth/sign-in`, { username, password })
+        return this.http.post<any>(`${environment.apiUrl}/Auth/sign-in`, { username, password })
             .pipe(map((data: UserDTO) => {
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
                 localStorage.setItem('accessToken', JSON.stringify(data.access_token));
@@ -52,21 +52,21 @@ export class AuthenticationService {
     }
 
     register(user: signupDTO) {
-        return this.http.post<any>(`${environment.apiUrl}/api/auth/sign-up`, user)
+        return this.http.post<any>(`${environment.apiUrl}/Auth/sign-up`, user)
             .pipe(map((data: UserDTO) => {
                 return data;
             }))
     }
 
     listUsers() {
-        return this.http.get<any>(`${environment.apiUrl}/api/auth/list-users`)
+        return this.http.get<any>(`${environment.apiUrl}/Auth/list-users`)
             .pipe(map((data: User[]) => {
                 return data;
             }))
     }
 
     getUserById(id: string) {
-        return this.http.get<any>(`${environment.apiUrl}/api/auth/get-user-by-id?userId=` + id)
+        return this.http.get<any>(`${environment.apiUrl}/Auth/get-user-by-id?userId=` + id)
             .pipe(map((data: User) => {
                 return data;
             }))
