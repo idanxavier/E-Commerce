@@ -18,6 +18,7 @@ services:
       - "3307"
 
   userapi:
+    container_name: userapi
     image: ecommerceuserapi
     ports:
       - "81:80"
@@ -27,6 +28,7 @@ services:
       - database
 
   productapi:
+    container_name: productapi
     image: ecommerceproductapi
     ports:
       - "82:80"
@@ -36,11 +38,22 @@ services:
       - database
 
   paymentapi:
+    container_name: paymentapi
     image: ecommercepaymentapi
     ports:
       - "83:80"
     build:
       context: Backend/Payment
+    depends_on:
+      - database
+
+  apigateway:
+    container_name: apigateway
+    image: ecommerceapigateway
+    ports:
+      - "84:80"
+    build:
+      context: Backend/Gateway
     depends_on:
       - database
 

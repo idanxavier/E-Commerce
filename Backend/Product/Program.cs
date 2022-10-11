@@ -1,5 +1,6 @@
 using ECommerceProductAPI.Domain;
 using ECommerceProductAPI.Infrastructure.Data.Repositories;
+using ECommerceProductAPI.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,8 @@ app.UseCors(p => {
     p.AllowAnyHeader();
     p.AllowAnyOrigin();
 });
+
+app.UseMiddleware<HeaderChecker>();
 
 app.UseHttpsRedirection();
 

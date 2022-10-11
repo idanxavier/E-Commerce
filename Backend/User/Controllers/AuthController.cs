@@ -13,7 +13,7 @@ namespace ECommerceUserAPI.Controllers
             _authService = authService;
         }
 
-        [HttpPost("SignUp")]
+        [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] RegisterModel model)
         {
             try {
@@ -25,7 +25,7 @@ namespace ECommerceUserAPI.Controllers
             }
         }
 
-        [HttpPost("SignIn")]
+        [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] LoginModel model) {
             try {
                 UserDTO user = await _authService.SignIn(model);

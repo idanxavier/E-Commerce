@@ -1,19 +1,24 @@
-using System.Text;
-using ECommerceAPIGateway.Middleware;
-using ECommerceUserAPI;
+using ECommerceAPIGateway.Domain;
+using ECommerceAPIGateway.Domain.Service.Factories;
+using ECommerceAPIGateway.Domain.Service.Implementations;
+using ECommerceAPIGateway.Domain.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MySqlConnector;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 string mySqlConnection = configuration.GetConnectionString("Database");
 
-services.AddControllers();
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 services.AddDbContextPool<MySQLContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 services.AddIdentity<IdentityUser, IdentityRole>()
@@ -24,8 +29,7 @@ services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
+}).AddJwtBearer(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
@@ -38,31 +42,28 @@ services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
     };
 });
-services.AddScoped<IAuthService, AuthService>();
+
+//services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<RequestHandler>();
+services.AddScoped<RequestFactory>();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope()) 
-{
-    var service = scope.ServiceProvider;
-
-    var context = service.GetRequiredService<MySQLContext>();
-    if (context.Database.GetPendingMigrations().Any())
-        context.Database.Migrate();
-}
-
-// app.UseHttpsRedirection();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseMiddleware<HeaderChecker>();
+//app.UseHttpsRedirection();
 
-app.UseCors(p => {
-    p.AllowAnyMethod();
-    p.AllowAnyHeader();
-    p.AllowAnyOrigin();
-});
+app.UseExceptionHandler(c => c.Run(async context =>
+{
+    var exception = context.Features
+        .Get<IExceptionHandlerPathFeature>()
+        .Error;
+    var response = new { error = exception.Message };
+    await context.Response.WriteAsJsonAsync(response);
+}));
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
