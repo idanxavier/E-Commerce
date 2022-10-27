@@ -8,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ecommerce
       MYSQL_USER: danxjj
-      MYSQL_PASSWORD: Cabuto12
+      MYSQL_PASSWORD: root
     command: --max_allowed_packet=32505856
     volumes:
       - dbdata:/var/lib/mysql
