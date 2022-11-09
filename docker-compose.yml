@@ -19,8 +19,8 @@ services:
   userapi:
     container_name: userapi
     image: ecommerceuserapi
-    ports:
-      - "81:80"
+    # ports:
+    #   - "81:80"
     build:
       context: Backend/User
     depends_on:
@@ -29,8 +29,8 @@ services:
   productapi:
     container_name: productapi
     image: ecommerceproductapi
-    ports:
-      - "82:80"
+    # ports:
+    #   - "82:80"
     build:
       context: Backend/Product
     depends_on:
@@ -39,8 +39,8 @@ services:
   paymentapi:
     container_name: paymentapi
     image: ecommercepaymentapi
-    ports:
-      - "83:80"
+    # ports:
+    #   - "83:80"
     build:
       context: Backend/Payment
     depends_on:
